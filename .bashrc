@@ -7,7 +7,7 @@ iatest=$(expr index "$-" i)
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	 . /etc/bashrc
+	. /etc/bashrc
 fi
 
 # Enable bash programmable completion features in interactive shells
@@ -20,6 +20,10 @@ fi
 #######################################################
 # EXPORTS
 #######################################################
+
+# Deno
+export DENO_INSTALL="/home/osamaelshimy/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
 
 # Disable the bell
 if [[ $iatest > 0 ]]; then bind "set bell-style visible"; fi
@@ -131,8 +135,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
-alias kal1='cd ~/programming/Kalbonyan-Elmarsos'
-alias kal2='cd ~/programming/kalbonyan-2'
+# alias sys='systemctl' This was an alias for MySql server
 
 # cd into the old directory
 alias bd='cd "$OLDPWD"'
@@ -217,6 +220,48 @@ alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 #######################################################
 # PERSONAL FUNCTIONS
 #######################################################
+make_cpp() {
+  source_file="$1"
+  output_file="${2:-output.out}"
+
+  g++ "$source_file" -o "$output_file"
+}
+
+
+create_cpp() {
+    file_name="$1"
+
+    # Check if the file already exists
+    if [ -e "$file_name" ]; then
+        read -p "File '$file_name' already exists. Do you want to replace it? (y/n): " answer
+        if [ "$answer" != "y" ]; then
+            echo "File not created."
+            return
+        fi
+    fi
+
+    # Create the C++ file with the code snippet
+    cat > "$file_name" <<EOF
+#include <iostream>
+using namespace std;
+
+int main() {
+
+  return 0;
+}
+EOF
+
+    echo "File '$file_name' created with C++ code."
+
+    # Open file in neovim 
+    nv $file_name
+}
+
+# Allow aliases in vim and non-interactive shell sessions
+# if [ -f ~/.bash_aliases ]; then
+#     . ~/.bash_aliases
+# fi
+
 # fanMode() 
 # {
 #     sudo su
@@ -501,19 +546,19 @@ netinfo ()
 	echo "---------------------------------------------------"
 }
 
-# # IP address lookup
-# alias whatismyip="whatsmyip"
-# function whatsmyip ()
-# {
-# 	# Dumps a list of all IP addresses for every device
-# 	# /sbin/ifconfig |grep -B1 "inet addr" |awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' |awk -F: '{ print $1 ": " $3 }';
+# IP address lookup
+alias whatismyip="whatsmyip"
+function whatsmyip ()
+{
+	# Dumps a list of all IP addresses for every device
+	/sbin/ifconfig |grep -B1 "inet addr" |awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' |awk -F: '{ print $1 ": " $3 }';
 
-# 	# Internal IP Lookup
-# 	echo -n "Internal IP: " ; /sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}'
+	# Internal IP Lookup
+  echo -n "Internal IP: " ; /sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}'
 
-# 	# External IP Lookup
-# 	echo -n "External IP: " ; wget http://smart-ip.net/myip -O - -q
-# }
+	# External IP Lookup
+	echo -n "External IP: " ; wget http://smart-ip.net/myip -O - -q
+}
 
 # # View Apache logs
 # apachelog ()
@@ -628,3 +673,8 @@ eval "$(starship init bash)"
 . /usr/share/autojump/autojump.sh
 
 
+
+PATH=~/.console-ninja/.bin:$PATH
+
+# Set the keybindings to Vim mode
+# set -o vi
