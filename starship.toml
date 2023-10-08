@@ -5,8 +5,7 @@ $directory\
 $git_branch\
 $git_status\
 $time\
-\n$chrachter\
-[❯❯❯ ](fg:#33658A)\
+\n[❯❯❯ ](fg:#33658A)\
 """
 
 command_timeout = 5000
@@ -23,8 +22,9 @@ format = '[ $user ]($style)'
 [directory]
 style = "bg:#434C5E"
 format = "[ $path ]($style)"
-truncation_length = 3
+truncation_length = 4
 truncation_symbol = "…/"
+truncate_to_repo = false
 
 [c]
 symbol = " "
