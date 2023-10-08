@@ -111,7 +111,7 @@ alias web='cd /var/www/html'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Edit this .bashrc file
-alias ebrc='edit ~/.bashrc'
+alias ebrc='nvim ~/.bashrc'
 
 # Show help for this .bashrc file
 alias hlp='less ~/.bashrc_help'
@@ -350,27 +350,9 @@ gacp() {
 
 
 # Allow aliases in vim and non-interactive shell sessions
-# if [ -f ~/.bash_aliases ]; then
-#     . ~/.bash_aliases
-# fi
-
-# fanMode() 
-# {
-#     sudo su
-#     # state=$1
-
-# 	sudo echo $1  >  /sys/bus/platform/drivers/ideapad_acpi/VPC2004\:00/fan_mode
-
-# 	cat /sys/bus/platform/drivers/ideapad_acpi/VPC2004\:00/fan_mode 
-
-# 	if [ $1 -eq 1 ]
-# 		then
-# 			echo "Fan Is On"
-# 		else
-# 			echo "Fan Is Off"
-# 	fi
-# }
-# fanMode
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
 
 #######################################################
 # SPECIAL FUNCTIONS
@@ -462,7 +444,7 @@ gacp() {
 # 	END { print "" }' total_size=$(stat -c '%s' "${1}") count=0
 # }
 
-# Copy and go to the directory - Deosn't work
+# Copy and go to the directory - Doesn't work
 # cpg ()
 # {
 # 	if [ -d "$2" ];then
@@ -596,33 +578,33 @@ ver ()
 }
 
 # # Automatically install the needed support files for this .bashrc file
-# install_bashrc_support ()
-# {
-# 	local dtype
-# 	dtype=$(distribution)
+install_bashrc_support ()
+{
+	local dtype
+	dtype=$(distribution)
 
-# 	if [ $dtype == "redhat" ]; then
-# 		sudo yum install multitail tree joe
-# 	elif [ $dtype == "suse" ]; then
-# 		sudo zypper install multitail
-# 		sudo zypper install tree
-# 		sudo zypper install joe
-# 	elif [ $dtype == "debian" ]; then
-# 		sudo apt-get install multitail tree joe
-# 	elif [ $dtype == "gentoo" ]; then
-# 		sudo emerge multitail
-# 		sudo emerge tree
-# 		sudo emerge joe
-# 	elif [ $dtype == "mandriva" ]; then
-# 		sudo urpmi multitail
-# 		sudo urpmi tree
-# 		sudo urpmi joe
-# 	elif [ $dtype == "slackware" ]; then
-# 		echo "No install support for Slackware"
-# 	else
-# 		echo "Unknown distribution"
-# 	fi
-# }
+ 	if [ $dtype == "redhat" ]; then
+ 		sudo yum install multitail tree joe
+ 	elif [ $dtype == "suse" ]; then
+ 		sudo zypper install multitail
+ 		sudo zypper install tree
+ 		sudo zypper install joe
+ 	elif [ $dtype == "debian" ]; then
+ 		sudo apt-get install multitail tree joe
+ 	elif [ $dtype == "gentoo" ]; then
+ 		sudo emerge multitail
+ 		sudo emerge tree
+ 		sudo emerge joe
+ 	elif [ $dtype == "mandriva" ]; then
+ 		sudo urpmi multitail
+ 		sudo urpmi tree
+ 		sudo urpmi joe
+	elif [ $dtype == "slackware" ]; then
+		echo "No install support for Slackware"
+	else
+		echo "Unknown distribution"
+	fi
+}
 
 # Show current network information
 netinfo ()
