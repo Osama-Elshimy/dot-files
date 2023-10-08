@@ -61,6 +61,14 @@ alias nano='edit'
 alias snano='sedit'
 alias vim='nvim'
 
+# git
+alias upread='git commit -m "update readme"'
+alias push='git push'
+alias ga='git add'
+alias gaa='git add .'
+alias gc='git commit -m'
+alias gs='git status'
+
 # To have colors for ls and all grep commands such as grep, egrep and zgrep
 export CLICOLOR=1
 export LS_COLORS='no=00:fi=00:di=00;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:*.xml=00;31:'
@@ -166,6 +174,7 @@ alias 644='chmod -R 644'
 alias 666='chmod -R 666'
 alias 755='chmod -R 755'
 alias 777='chmod -R 777'
+alias ux='chmod u+x'
 
 # Search command line history
 alias h="history | grep "
@@ -220,14 +229,23 @@ alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 #######################################################
 # PERSONAL FUNCTIONS
 #######################################################
-make_cpp() {
+# Compile C++ file
+makecpp() {
   source_file="$1"
   output_file="${2:-output.out}"
 
   g++ "$source_file" -o "$output_file"
 }
 
+# Compile C file
+makec() {
+  source_file="$1"
+  output_file="${2:-output.out}"
 
+  gcc "$source_file" -o "$output_file"
+}
+
+# Create C++ file with boilerplate code
 create_cpp() {
     file_name="$1"
 
@@ -256,6 +274,80 @@ EOF
     # Open file in neovim 
     nv $file_name
 }
+
+# Create C file with boilerplate code
+create_c() {
+    file_name="$1"
+
+    # Check if the file already exists
+    if [ -e "$file_name" ]; then
+        read -p "File '$file_name' already exists. Do you want to replace it? (y/n): " answer
+        if [ "$answer" != "y" ]; then
+            echo "File not created."
+            return
+        fi
+    fi
+
+    # Create the C file with the code snippet
+    cat > "$file_name" <<EOF
+#include <stdio.h>
+
+int main(void)
+{
+  printf("Hello, world!\n");
+  return (0);
+}
+EOF
+
+    echo "File '$file_name' created with C code."
+
+    # Open file in neovim 
+    nv $file_name
+}
+
+# Create bash script with boilerplate code
+create_bash() {
+    file_name="$1"
+
+    # Check if the file already exists
+    if [ -e "$file_name" ]; then
+        read -p "File '$file_name' already exists. Do you want to replace it? (y/n): " answer
+        if [ "$answer" != "y" ]; then
+            echo "File not created."
+            return
+        fi
+    fi
+
+    # Create bash script with boilerplate plate
+    cat > "$file_name" <<EOF
+#!/bin/bash
+
+EOF
+
+    echo "File '$file_name' created with bash code."
+
+    # Open file in neovim 
+    nv $file_name
+}
+
+# git add, commit, and push
+gacp() {
+    # Check if at least one argument is provided
+    if [ "$#" -lt 1 ]; then
+        echo "Usage: git_add_commit_push <filename(s)> [<commit_message>]"
+        return 1
+    fi
+
+    # Get the filename(s) and commit message
+    files="$1"
+    message="${2:-$files}"  # Use the second argument as commit message, default to filenames
+
+    # Perform Git actions
+    git add "$files"
+    git commit -m "$message"
+    git push
+}
+
 
 # Allow aliases in vim and non-interactive shell sessions
 # if [ -f ~/.bash_aliases ]; then
