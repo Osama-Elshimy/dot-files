@@ -1,6 +1,6 @@
 format = """
 [░▒▓](#a3aed2)\
-$username\
+$battery\
 $directory\
 $git_branch\
 $git_status\
@@ -25,6 +25,13 @@ format = "[ $path ]($style)"
 truncation_length = 4
 truncation_symbol = "…/"
 truncate_to_repo = false
+
+[battery]
+format = '[ Battery: $percentage ]($style)'
+
+[[battery.display]]
+threshold = 100
+style = 'fg:#aaaaaa bg:#4C566A'
 
 [c]
 symbol = " "
