@@ -152,20 +152,20 @@ alias bd='cd "$OLDPWD"'
 alias rmd='/bin/rm  --recursive --force --verbose '
 
 # Alias's for multiple directory listing commands
-alias la='ls -Alh' # show hidden files
-alias ls='ls --color=always' # add colors and file type extensions ( -aFh)
-alias lx='ls -lXBh' # sort by extension
-alias lk='ls -lSrh' # sort by size
-alias lc='ls -lcrh' # sort by change time
-alias lu='ls -lurh' # sort by access time
-alias lr='ls -lRh' # recursive ls
-alias lt='ls -ltrh' # sort by date
-alias lm='ls -alh |more' # pipe through 'more'
-alias lw='ls -xAh' # wide listing format
-alias ll='ls -Fls' # long listing format
-alias labc='ls -lap' #alphabetical sort
+alias la='ls -Alh'               # show hidden files
+alias ls='ls --color=always'     # add colors and file type extensions ( -aFh)
+alias lx='ls -lXBh'              # sort by extension
+alias lk='ls -lSrh'              # sort by size
+alias lc='ls -lcrh'              # sort by change time
+alias lu='ls -lurh'              # sort by access time
+alias lr='ls -lRh'               # recursive ls
+alias lt='ls -ltrh'              # sort by date
+alias lm='ls -alh |more'         # pipe through 'more'
+alias lw='ls -xAh'               # wide listing format
+alias ll='ls -Fls'               # long listing format
+alias labc='ls -lap'             #alphabetical sort
 alias lf="ls -l | egrep -v '^d'" # files only
-alias ldir="ls -l | egrep '^d'" # directories only
+alias ldir="ls -l | egrep '^d'"  # directories only
 
 # alias chmod commands
 alias mx='chmod a+x'
@@ -229,37 +229,45 @@ alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 #######################################################
 # PERSONAL FUNCTIONS
 #######################################################
-# Compile C++ file
+# Compile and run C++ file
 makecpp() {
-  source_file="$1"
-  output_file="${2:-output.out}"
+	source_file="$1"
+	output_file="${2:-a.out}"
 
-  g++ "$source_file" -o "$output_file"
+	g++ "$source_file" -o "$output_file" && ./"$output_file"
 }
 
-# Compile C file
+# Compile and run C file
 makec() {
-  source_file="$1"
-  output_file="${2:-output.out}"
+	flags="$1"
+	main_file="$2"
+	additional_files="${@:3}"
+	output_file="${4:-a.out}"
 
-  gcc "$source_file" -o "$output_file"
+	if [ "$flags" == "alx" ]; then
+		gcc -Wall -Werror -Wextra -pedantic -std=gnu89 "$main_file" $additional_files -o "$output_file" && ./"$output_file"
+		return
+	fi
+
+	gcc "$main_file" $additional_files -o "$output_file" && ./"$output_file"
+
 }
 
 # Create C++ file with boilerplate code
-create_cpp() {
-    file_name="$1"
+ccpp() {
+	file_name="$1"
 
-    # Check if the file already exists
-    if [ -e "$file_name" ]; then
-        read -p "File '$file_name' already exists. Do you want to replace it? (y/n): " answer
-        if [ "$answer" != "y" ]; then
-            echo "File not created."
-            return
-        fi
-    fi
+	# Check if the file already exists
+	if [ -e "$file_name" ]; then
+		read -p "File '$file_name' already exists. Do you want to replace it? (y/n): " answer
+		if [ "$answer" != "y" ]; then
+			echo "File not created."
+			return
+		fi
+	fi
 
-    # Create the C++ file with the code snippet
-    cat > "$file_name" <<EOF
+	# Create the C++ file with the code snippet
+	cat >"$file_name" <<EOF
 #include <iostream>
 using namespace std;
 
@@ -269,29 +277,33 @@ int main() {
 }
 EOF
 
-    echo "File '$file_name' created with C++ code."
+	echo "File '$file_name' created with C++ code."
 
-    # Open file in neovim 
-    nv $file_name
+	# Open file in neovim
+	nv $file_name
 }
 
 # Create C file with boilerplate code
-create_c() {
-    file_name="$1"
+cc() {
+	file_name="$1"
 
-    # Check if the file already exists
-    if [ -e "$file_name" ]; then
-        read -p "File '$file_name' already exists. Do you want to replace it? (y/n): " answer
-        if [ "$answer" != "y" ]; then
-            echo "File not created."
-            return
-        fi
-    fi
+	# Check if the file already exists
+	if [ -e "$file_name" ]; then
+		read -p "File '$file_name' already exists. Do you want to replace it? (y/n): " answer
+		if [ "$answer" != "y" ]; then
+			echo "File not created."
+			return
+		fi
+	fi
 
-    # Create the C file with the code snippet
-    cat > "$file_name" <<EOF
+	# Create the C file with the code snippet
+	cat >"$file_name" <<EOF
 #include <stdio.h>
 
+/**
+ *
+ *
+ */
 int main(void)
 {
   printf("Hello, world!\n");
@@ -299,59 +311,58 @@ int main(void)
 }
 EOF
 
-    echo "File '$file_name' created with C code."
+	echo "File '$file_name' created with C code."
 
-    # Open file in neovim 
-    nv $file_name
+	# Open file in neovim
+	nv $file_name
 }
 
 # Create bash script with boilerplate code
 create_bash() {
-    file_name="$1"
+	file_name="$1"
 
-    # Check if the file already exists
-    if [ -e "$file_name" ]; then
-        read -p "File '$file_name' already exists. Do you want to replace it? (y/n): " answer
-        if [ "$answer" != "y" ]; then
-            echo "File not created."
-            return
-        fi
-    fi
+	# Check if the file already exists
+	if [ -e "$file_name" ]; then
+		read -p "File '$file_name' already exists. Do you want to replace it? (y/n): " answer
+		if [ "$answer" != "y" ]; then
+			echo "File not created."
+			return
+		fi
+	fi
 
-    # Create bash script with boilerplate plate
-    cat > "$file_name" <<EOF
+	# Create bash script with boilerplate plate
+	cat >"$file_name" <<EOF
 #!/bin/bash
 
 EOF
 
-    echo "File '$file_name' created with bash code."
+	echo "File '$file_name' created with bash code."
 
-    # Open file in neovim 
-    nv $file_name
+	# Open file in neovim
+	nv $file_name
 }
 
 # git add, commit, and push
 gacp() {
-    # Check if at least one argument is provided
-    if [ "$#" -lt 1 ]; then
-        echo "Usage: git_add_commit_push <filename(s)> [<commit_message>]"
-        return 1
-    fi
+	# Check if at least one argument is provided
+	if [ "$#" -lt 1 ]; then
+		echo "Usage: git_add_commit_push <filename(s)> [<commit_message>]"
+		return 1
+	fi
 
-    # Get the filename(s) and commit message
-    files="$1"
-    message="${2:-$files}"  # Use the second argument as commit message, default to filenames
+	# Get the filename(s) and commit message
+	files="$1"
+	message="${2:-$files}" # Use the second argument as commit message, default to filenames
 
-    # Perform Git actions
-    git add "$files"
-    git commit -m "$message"
-    git push
+	# Perform Git actions
+	git add "$files"
+	git commit -m "$message"
+	git push
 }
-
 
 # Allow aliases in vim and non-interactive shell sessions
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+	. ~/.bash_aliases
 fi
 
 #######################################################
@@ -455,31 +466,27 @@ fi
 # }
 
 # Move and go to the directory
-mvg ()
-{
-	if [ -d "$2" ];then
+mvg() {
+	if [ -d "$2" ]; then
 		mv $1 $2 && cd $2
 	else
 		mv $1 $2
 	fi
 }
 
-# # Create and go to the directory
-mkdirg ()
-{
+# Create and go to the directory
+mdg() {
 	mkdir -p $1
 	cd $1
 }
 
-# # Goes up a specified number of directories  (i.e. up 4)
-up ()
-{
+# Goes up a specified number of directories  (i.e. up 4)
+up() {
 	local d=""
 	limit=$1
-	for ((i=1 ; i <= limit ; i++))
-		do
-			d=$d/..
-		done
+	for ((i = 1; i <= limit; i++)); do
+		d=$d/..
+	done
 	d=$(echo $d | sed 's/^\///')
 	if [ -z "$d" ]; then
 		d=..
@@ -488,8 +495,7 @@ up ()
 }
 
 #Automatically do an ls after each cd
-cd ()
-{
+cd() {
 	if [ -n "$1" ]; then
 		builtin cd "$@" && ls
 	else
@@ -504,33 +510,32 @@ cd ()
 # }
 
 # # Show the current distribution
-distro ()
-{
+distro() {
 	local dtype
 	# Assume unknown
 	dtype="unknown"
-    
+
 	# First test against Fedora / RHEL / CentOS / generic Redhat derivative
 	if [ -r /etc/rc.d/init.d/functions ]; then
 		source /etc/rc.d/init.d/functions
-		[ zz`type -t passed 2>/dev/null` == "zzfunction" ] && dtype="redhat"
-    
+		[ zz$(type -t passed 2>/dev/null) == "zzfunction" ] && dtype="redhat"
+
 	# Then test against SUSE (must be after Redhat,
 	# I've seen rc.status on Ubuntu I think? TODO: Recheck that)
 	elif [ -r /etc/rc.status ]; then
 		source /etc/rc.status
-		[ zz`type -t rc_reset 2>/dev/null` == "zzfunction" ] && dtype="suse"
-    
+		[ zz$(type -t rc_reset 2>/dev/null) == "zzfunction" ] && dtype="suse"
+
 	# Then test against Debian, Ubuntu and friends
 	elif [ -r /lib/lsb/init-functions ]; then
 		source /lib/lsb/init-functions
-		[ zz`type -t log_begin_msg 2>/dev/null` == "zzfunction" ] && dtype="debian"
-    
+		[ zz$(type -t log_begin_msg 2>/dev/null) == "zzfunction" ] && dtype="debian"
+
 	# Then test against Gentoo
 	elif [ -r /etc/init.d/functions.sh ]; then
 		source /etc/init.d/functions.sh
-		[ zz`type -t ebegin 2>/dev/null` == "zzfunction" ] && dtype="gentoo"
-    
+		[ zz$(type -t ebegin 2>/dev/null) == "zzfunction" ] && dtype="gentoo"
+
 	# For Mandriva we currently just test if /etc/mandriva-release exists
 	# and isn't empty (TODO: Find a better way :)
 	elif [ -s /etc/mandriva-release ]; then
@@ -545,8 +550,7 @@ distro ()
 }
 
 # Show the current version of the operating system
-ver ()
-{
+ver() {
 	local dtype
 	dtype=$(distro)
 
@@ -578,27 +582,26 @@ ver ()
 }
 
 # # Automatically install the needed support files for this .bashrc file
-install_bashrc_support ()
-{
+install_bashrc_support() {
 	local dtype
 	dtype=$(distribution)
 
- 	if [ $dtype == "redhat" ]; then
- 		sudo yum install multitail tree joe
- 	elif [ $dtype == "suse" ]; then
- 		sudo zypper install multitail
- 		sudo zypper install tree
- 		sudo zypper install joe
- 	elif [ $dtype == "debian" ]; then
- 		sudo apt-get install multitail tree joe
- 	elif [ $dtype == "gentoo" ]; then
- 		sudo emerge multitail
- 		sudo emerge tree
- 		sudo emerge joe
- 	elif [ $dtype == "mandriva" ]; then
- 		sudo urpmi multitail
- 		sudo urpmi tree
- 		sudo urpmi joe
+	if [ $dtype == "redhat" ]; then
+		sudo yum install multitail tree joe
+	elif [ $dtype == "suse" ]; then
+		sudo zypper install multitail
+		sudo zypper install tree
+		sudo zypper install joe
+	elif [ $dtype == "debian" ]; then
+		sudo apt-get install multitail tree joe
+	elif [ $dtype == "gentoo" ]; then
+		sudo emerge multitail
+		sudo emerge tree
+		sudo emerge joe
+	elif [ $dtype == "mandriva" ]; then
+		sudo urpmi multitail
+		sudo urpmi tree
+		sudo urpmi joe
 	elif [ $dtype == "slackware" ]; then
 		echo "No install support for Slackware"
 	else
@@ -607,8 +610,7 @@ install_bashrc_support ()
 }
 
 # Show current network information
-netinfo ()
-{
+netinfo() {
 	echo "--------------- Network Information ---------------"
 	/sbin/ifconfig | awk /'inet addr/ {print $2}'
 	echo ""
@@ -622,16 +624,17 @@ netinfo ()
 
 # IP address lookup
 alias whatismyip="whatsmyip"
-function whatsmyip ()
-{
+function whatsmyip() {
 	# Dumps a list of all IP addresses for every device
-	/sbin/ifconfig |grep -B1 "inet addr" |awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' |awk -F: '{ print $1 ": " $3 }';
+	/sbin/ifconfig | grep -B1 "inet addr" | awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' | awk -F: '{ print $1 ": " $3 }'
 
 	# Internal IP Lookup
-  echo -n "Internal IP: " ; /sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}'
+	echo -n "Internal IP: "
+	/sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}'
 
 	# External IP Lookup
-	echo -n "External IP: " ; wget http://smart-ip.net/myip -O - -q
+	echo -n "External IP: "
+	wget http://smart-ip.net/myip -O - -q
 }
 
 # # View Apache logs
@@ -754,4 +757,3 @@ fi
 
 # Set the keybindings to Vim mode
 # set -o vi
-
