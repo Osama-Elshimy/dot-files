@@ -239,18 +239,25 @@ makecpp() {
 
 # Compile and run C file
 makec() {
-	flags="$1"
-	main_file="$2"
-	additional_files="${@:3}"
-	output_file="${4:-a.out}"
+	flags=""
+	source_files=()
 
-	if [ "$flags" == "alx" ]; then
-		gcc -Wall -Werror -Wextra -pedantic -std=gnu89 "$main_file" $additional_files -o "$output_file" && ./"$output_file"
-		return
+	# Check if the first argument is the flag
+	if [ "$1" == "alx" ]; then
+		flags="alx"
+		shift # Remove the flag from the arguments
 	fi
 
-	gcc "$main_file" $additional_files -o "$output_file" && ./"$output_file"
+	# Rest of the arguments are assumed to be source files
+	source_files=("$@")
 
+	gcc_args=("${source_files[@]}" -o a.out)
+
+	if [ "$flags" == "alx" ]; then
+		gcc_args+=(-Wall -Werror -Wextra -pedantic -std=gnu89)
+	fi
+
+	gcc "${gcc_args[@]}" && ./a.out
 }
 
 # Create C++ file with boilerplate code
