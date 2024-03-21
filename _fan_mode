@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# state=$1
+
+echo $1  >  /sys/bus/platform/drivers/ideapad_acpi/VPC2004\:00/fan_mode
+
+cat /sys/bus/platform/drivers/ideapad_acpi/VPC2004\:00/fan_mode 
+
+if [ $1 -eq 1 ]
+  then
+    echo "Fan Is On"
+  else
+    echo "Fan Is Off"
+fi

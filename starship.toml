@@ -1,9 +1,9 @@
 format = """
 [░▒▓](#a3aed2)\
-$battery\
 $directory\
 $git_branch\
 $git_status\
+$battery\
 $time\
 \n[❯❯❯ ](fg:#33658A)\
 """
@@ -24,7 +24,7 @@ style = "bg:#434C5E"
 format = "[ $path ]($style)"
 truncation_length = 4
 truncation_symbol = "…/"
-truncate_to_repo = false
+truncate_to_repo = true
 
 [battery]
 format = '[ Battery: $percentage ]($style)'
@@ -54,7 +54,7 @@ style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
 [git_branch]
-symbol = ""
+symbol = ""
 style = "bg:#4C566A"
 format = '[ $symbol $branch ]($style)'
 

@@ -8,8 +8,14 @@ fi
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# Better man output - batcat must be installed
+export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+
+# Change autocomplete button to ctrl-j instead of right-arrow
+bindkey '^k' autosuggest-accept
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -77,7 +83,8 @@ ENABLE_CORRECTION="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git autojump zsh-autosuggestions zsh-syntax-highlighting)
+# plugins=(git autojump zsh-autosuggestions zsh-syntax-highlighting yt-dlp zsh-vi-mode) # Also loaded
+plugins=(git autojump zsh-autosuggestions zsh-syntax-highlighting yt-dlp) # Most important
 
 source $ZSH/oh-my-zsh.sh
 
@@ -127,6 +134,9 @@ alias less='less -R'
 alias cls='clear'
 alias apt-get='sudo apt-get'
 alias nv='nvim'
+alias yt='yt-dlp'
+alias c='xclip -selection clipboard'
+alias v='xclip -o'
 
 # Change directory aliases
 alias home='cd ~'
@@ -202,7 +212,7 @@ makec() {
     gcc_args=("${source_files[@]}")
 
     if [ "$flags" = "alx" ]; then
-        gcc_args+=(-Wall -Wextra -Werror -pedantic -std=gnu89 -Wno-format)
+        gcc_args+=(-Wall -pedantic -Werror -Wextra -std=gnu89)
     fi
 
     gcc "${gcc_args[@]}"
@@ -328,8 +338,24 @@ cd() {
 	fi
 }
 
-# Change autocomplete button to tab instead of right-arrow
-bindkey '^I' autosuggest-accept
+# Better git diff output - batcat must be installed
+batdiff() {
+    if [ "$#" -eq 1 ]; then
+        # If a filename is provided, use git diff for that file
+        git diff "$1" | batcat
+    else
+        # If no filename provided, show diff for all files
+        git diff --name-only --relative --diff-filter=d | xargs batcat --diff
+    fi
+}
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# pnpm
+export PNPM_HOME="/home/osamaelshimy/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

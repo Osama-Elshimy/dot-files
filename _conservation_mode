@@ -1,0 +1,17 @@
+#!/bin/bash
+
+state=$1
+
+echo $1  >  /sys/bus/platform/drivers/ideapad_acpi/VPC2004\:00/conservation_mode
+
+cat /sys/bus/platform/drivers/ideapad_acpi/VPC2004\:00/conservation_mode
+
+if (( $1 == 1 ))
+  then
+    echo "Conservation Mode Is On"
+elif (( $1 == 0 ))
+  then 
+    echo "Conservation Mode Is Off"
+else
+  echo "Invalid argument! Insert 1 for conservation mode or 2 for normal mode."
+fi

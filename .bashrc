@@ -251,13 +251,13 @@ makec() {
 	# Rest of the arguments are assumed to be source files
 	source_files=("$@")
 
-	gcc_args=("${source_files[@]}" -o a.out)
+	gcc_args=("${source_files[@]}")
 
 	if [ "$flags" == "alx" ]; then
 		gcc_args+=(-Wall -Werror -Wextra -pedantic -std=gnu89)
 	fi
 
-	gcc "${gcc_args[@]}" && ./a.out
+	gcc "${gcc_args[@]}"
 }
 
 # Create C++ file with boilerplate code
@@ -764,3 +764,7 @@ fi
 
 # Set the keybindings to Vim mode
 # set -o vi
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH=$BUN_INSTALL/bin:$PATH
