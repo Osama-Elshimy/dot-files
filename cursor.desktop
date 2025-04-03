@@ -1,0 +1,9 @@
+# This is a Cursor application launcher that works well on Linux Mint.
+# It should be placed in /usr/share/applications/cursor.desktop
+
+[Desktop Entry]
+Name=Cursor
+Exec=/opt/cursor.AppImage
+Icon=/opt/cursor.png
+Type=Application
+Categories=Development;
