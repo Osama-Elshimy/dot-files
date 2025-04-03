@@ -768,3 +768,12 @@ fi
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH=$BUN_INSTALL/bin:$PATH
+
+### Cursor
+
+if [ -f "$HOME/github/dot-files/cursor.sh" ]; then
+    source "$HOME/github/dot-files/cursor.sh"
+fi
+
+### Cursor end
+
