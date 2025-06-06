@@ -1,0 +1,7 @@
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+
+[user]
+	name = Osama Elshimy
+	email = osama.elshimy@bltzo.com

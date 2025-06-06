@@ -1,0 +1,41 @@
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+
+[user]
+	name = Osama Elshimy
+	email = osama.elshimy.o.e@gmail.com
+
+[init]
+	defaultBranch = main
+
+[push]
+	autoSetupRemote = true
+	default = current
+
+[alias]
+	undo = reset --soft HEAD^
+	commit = commit -n
+
+[core]
+	editor = code --wait
+	pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+		line-numbers = true
+		side-by-side = true
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
+[includeIf "gitdir:~/bltzo/**/"]
+    path = ~/.gitconfig-work
+[pull]
+	rebase = true
